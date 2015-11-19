@@ -45,6 +45,12 @@ Before requesting, you have to select a database and a collection (see previous 
 ### Creation
 `$db->get('document')->create($json);`
 
+### Requesting
+
+Fell free to write your SQL query here.
+
+`$db->get('document')->query('SELECT * FROM my_table');`
+
 ### Remove
 
 You have to select your document before removing it to obtain the internal ID.
