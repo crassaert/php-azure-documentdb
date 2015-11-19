@@ -1,0 +1,20 @@
+{
+    "name": "crassaert/php-azure-documentdb",
+    "require-dev": {
+        "phpunit/phpunit": "5.0.*"
+        },
+        "autoload": {
+            "psr-4": { 
+                "Crassaert\\AzureDocumentDB\\": "src/Crassaert/AzureDocumentDB"
+            }
+        },
+        "description": "PHP wrapper to query Microsoft Azure DocumentDB REST API",
+        "minimum-stability": "stable",
+        "license": "GPL-3.0",
+        "authors": [
+            {
+                "name": "Cédric Rassaert",
+                "email": "crassaert@wamiz.com"
+            }
+        ]
+}
