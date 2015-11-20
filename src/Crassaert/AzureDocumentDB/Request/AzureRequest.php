@@ -3,7 +3,7 @@
  * @Author: cedric
  * @Date:   2015-11-17 11:27:42
  * @Last Modified by:   cedric
- * @Last Modified time: 2015-11-19 17:23:35
+ * @Last Modified time: 2015-11-20 17:17:35
  */
 
 namespace Crassaert\AzureDocumentDB\Request;
@@ -21,7 +21,7 @@ class AzureRequest {
 		$this->debug = $debug;
 	}
 
-	public function request($path, $method = 'GET', $options = array(), $resource_type = null, $resource_id = '')
+	public function request($path, $method = 'GET', $options = array(), $resource_type = null, $resource_id = '', $additional_headers = array())
 	{
 
 		$curl = curl_init($this->url . '/' . $path);
@@ -37,7 +37,7 @@ class AzureRequest {
 			$resource_type = array_shift(explode('/', $path));
 		}
 
-		$this->setRequestData($curl, $method, $resource_type, $resource_id, $options);
+		$this->setRequestData($curl, $method, $resource_type, $resource_id, $options, $additional_headers);
 
 		($this->debug) ?
 		print "[[Debug: \nReq: ".curl_getinfo($curl, CURLINFO_HEADER_OUT) : $t=1;
@@ -50,9 +50,9 @@ class AzureRequest {
 		return json_decode($result);
 	}
 
-	protected function setRequestData(&$curl, $method, $resource_type, $resource_id, $options)
+	protected function setRequestData(&$curl, $method, $resource_type, $resource_id, $options, $additional_headers)
 	{
-		$headers = $this->getAuthHeaders($method, $resource_type, $resource_id);
+		$headers = array_merge($this->getAuthHeaders($method, $resource_type, $resource_id), $additional_headers);
 
 		if ($method == 'POST' || $method == 'PUT')
 		{                                        

@@ -3,6 +3,9 @@ PHP wrapper for DocumentDB operations (beta version)
 
 # Usage
 
+## Install
+`composer require crassaert/php-azure-documentdb`
+
 ## Instantiate
 `$db = new AzureDocumentDB(AZURE_HOST, AZURE_KEY, false);`
 
@@ -63,6 +66,6 @@ $db->get('document')->delete($rid);
 
 ## TODO
 
-Implement attachents, permissions, triggers, users, sprocs and UDF.
+Implement permissions, triggers, users, sprocs and UDF.
 
 You can find all features on [Microsoft Azure Website](https://msdn.microsoft.com/fr-fr/library/azure/dn781481.aspx)
