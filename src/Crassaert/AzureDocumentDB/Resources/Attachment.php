@@ -3,7 +3,7 @@
  * @Author: cedric
  * @Date:   2015-11-19 11:30:35
  * @Last Modified by:   cedric
- * @Last Modified time: 2015-11-20 17:52:32
+ * @Last Modified time: 2015-11-20 17:54:22
  */
 namespace Crassaert\AzureDocumentDB\Resources;
 
@@ -13,7 +13,7 @@ class Attachment extends Resources {
 
 	protected $attachment;
 
-	public function createRawAttachment($attachment_name, $contentType, $filePath, $slug, $select = true)
+	public function createRawAttachment($filePath, $contentType, $slug, $select = true)
 	{
 		$headers = array('Slug: '.$slug, 'Content-Type: ' . $contentType)
 		$res = $this->azureDB->request->request(
