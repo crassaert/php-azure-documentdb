@@ -3,7 +3,7 @@
  * @Author: cedric
  * @Date:   2015-11-17 11:27:42
  * @Last Modified by:   cedric
- * @Last Modified time: 2015-11-20 17:17:35
+ * @Last Modified time: 2016-01-14 11:45:58
  */
 
 namespace Crassaert\AzureDocumentDB\Request;
@@ -34,7 +34,7 @@ class AzureRequest {
 
 		if (!$resource_type)
 		{
-			$resource_type = array_shift(explode('/', $path));
+			$resource_type = current(explode('/', $path));
 		}
 
 		$this->setRequestData($curl, $method, $resource_type, $resource_id, $options, $additional_headers);
