@@ -61,6 +61,7 @@ class AzureRequest {
 			if (isset($options['query']))
 			{
 				$headers[] = 'x-ms-documentdb-isquery: True';
+                $headers[] = 'x-ms-max-item-count: -1';
 				$headers[] = 'Content-Type: application/sql';
 				$headers[] = 'Content-Length: ' . strlen($options['query']);
 
@@ -69,6 +70,7 @@ class AzureRequest {
 			else
 			{
 				$headers[] = 'Content-Type: application/json';
+                $headers[] = 'x-ms-max-item-count: -1';
 				$headers[] = 'Content-Length: ' . strlen($data);
 
 				curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
