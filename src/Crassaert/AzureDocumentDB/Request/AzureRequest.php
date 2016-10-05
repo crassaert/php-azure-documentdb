@@ -112,7 +112,7 @@ class AzureRequest {
 			'User-Agent: documentdb.php.sdk/1.0.0',
 			'Cache-Control: no-cache',
 			'x-ms-date: ' . $x_ms_date,
-			'x-ms-version: 2015-04-08',
+			'x-ms-version: 2015-12-16',
 			'authorization: ' . urlencode("type=$master&ver=$token&sig=$sig")
 			);
 	}
