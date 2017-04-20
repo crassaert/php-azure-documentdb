@@ -2,3 +2,4 @@ test/config.php
 composer.lock
 phpunit
 vendor
+.idea
