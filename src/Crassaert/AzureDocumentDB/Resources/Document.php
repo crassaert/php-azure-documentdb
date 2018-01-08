@@ -1,10 +1,10 @@
 <?php
-/**
- * @Author: cedric
- * @Date:   2015-11-19 11:30:35
- * @Last Modified by:   cedric
- * @Last Modified time: 2015-11-19 17:31:44
- */
+# @Author: Cédric Rassaert <crassaert>
+# @Date:   2018-01-08T10:21:08+01:00
+# @Email:  crassaert@gmail.com
+# @Last modified by:   crassaert
+# @Last modified time: 2018-01-08T14:04:05+01:00
+
 namespace Crassaert\AzureDocumentDB\Resources;
 
 use Crassaert\AzureDocumentDB\Resources\Resources;
@@ -55,12 +55,12 @@ class Document extends Resources {
 			'docs',
 			$this->azureDB->get('collection')->getProperty('_rid')
 			);
-		
+
 		if ($select == true)
 		{
 			$this->document = $res;
 		}
-		
+
 		return $res;
 	}
 

@@ -1,10 +1,9 @@
 <?php
-/**
- * @Author: cedric
- * @Date:   2015-11-17 11:27:42
- * @Last Modified by:   cedric
- * @Last Modified time: 2016-01-14 11:45:58
- */
+# @Author: Cédric Rassaert <crassaert>
+# @Date:   2018-01-08T10:21:08+01:00
+# @Email:  crassaert@gmail.com
+# @Last modified by:   crassaert
+# @Last modified time: 2018-01-08T14:40:04+01:00
 
 namespace Crassaert\AzureDocumentDB\Request;
 
@@ -47,6 +46,8 @@ class AzureRequest {
 		curl_close($curl);
 		($this->debug) ? print "\nRes: $result]]\n" : $t=1;
 
+		$this->handleErrors($result);
+
 		return json_decode($result);
 	}
 
@@ -55,7 +56,7 @@ class AzureRequest {
 		$headers = array_merge($this->getAuthHeaders($method, $resource_type, $resource_id), $additional_headers);
 
 		if ($method == 'POST' || $method == 'PUT')
-		{                                        
+		{
 			$data = json_encode($options);
 
 			if (isset($options['query']))
@@ -78,7 +79,7 @@ class AzureRequest {
 		}
 
 		$headers[] = 'api-key:' . $this->key;
-		curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);  
+		curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
 	}
 
 
@@ -109,11 +110,19 @@ class AzureRequest {
 
 		return Array(
 			'Accept: application/json',
-			'User-Agent: documentdb.php.sdk/1.0.0',
+			'User-Agent: cosmosdb.php.sdk/1.0.0',
 			'Cache-Control: no-cache',
 			'x-ms-date: ' . $x_ms_date,
-			'x-ms-version: 2015-12-16',
+			'x-ms-version: 2017-02-22',
 			'authorization: ' . urlencode("type=$master&ver=$token&sig=$sig")
 			);
+	}
+
+	protected function handleErrors($response)
+	{
+		if (isset($response->code))
+		{
+			throw new \Exception($response->message, 1);
+		}
 	}
 }

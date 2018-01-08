@@ -1,5 +1,12 @@
 # php-azure-documentdb
-PHP wrapper for DocumentDB operations (beta version)
+PHP wrapper for CosmosDB (ex DocumentDB) operations (beta version)
+
+## Update January 2018 v1.1
+
+- Use of the x-ms-version 2017-02-22
+- PHP 7.0 mini recommended
+- Enhanced unit tests
+- Adding some errors throws
 
 # Usage
 
@@ -38,7 +45,6 @@ Before requesting, you have to select a database (see previous paragraph).
 `$db->get('collection')->select('my_collection');`
 
 ### Remove
-
 `$db->get('collection')->delete('my_collection');`
 
 ## Document

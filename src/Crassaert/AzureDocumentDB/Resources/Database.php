@@ -1,10 +1,10 @@
 <?php
-/**
- * @Author: cedric
- * @Date:   2015-11-19 11:30:35
- * @Last Modified by:   cedric
- * @Last Modified time: 2015-11-19 16:26:07
- */
+# @Author: Cédric Rassaert <crassaert>
+# @Date:   2018-01-08T10:21:08+01:00
+# @Email:  crassaert@gmail.com
+# @Last modified by:   crassaert
+# @Last modified time: 2018-01-08T14:49:13+01:00
+
 namespace Crassaert\AzureDocumentDB\Resources;
 
 use Crassaert\AzureDocumentDB\Resources\Resources;
@@ -32,6 +32,9 @@ class Database extends Resources {
 				return $database;
 			}
 		}
+
+		throw new \Exception("The database " . $db_name . " does not exists", 1);
+
 	}
 
 	/*
@@ -40,12 +43,12 @@ class Database extends Resources {
 	public function create($db_name, $select = true)
 	{
 		$res = $this->azureDB->request->request('dbs', 'POST', array('id' => $db_name));
-		
+
 		if ($select == true)
 		{
 			$this->database = $res;
 		}
-		
+
 		return $res;
 	}
 
