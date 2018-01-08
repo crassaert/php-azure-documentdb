@@ -3,7 +3,7 @@
 # @Date:   2018-01-08T10:21:08+01:00
 # @Email:  crassaert@gmail.com
 # @Last modified by:   crassaert
-# @Last modified time: 2018-01-08T14:40:04+01:00
+# @Last modified time: 2018-01-08T16:02:51+01:00
 
 namespace Crassaert\AzureDocumentDB\Request;
 
@@ -25,7 +25,7 @@ class AzureRequest {
 
 		$curl = curl_init($this->url . '/' . $path);
 
-		//curl_setopt($curl, CURLOPT_HEADER, $this->debug);
+		//curl_setopt($curl, CURLOPT_HEADER, 1);
 		curl_setopt($curl, CURLOPT_SSLVERSION, 1);
 		curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($curl, CURLOPT_VERBOSE, $this->debug);
@@ -43,12 +43,15 @@ class AzureRequest {
 
 		//curl_setopt_array($curl, $options);
 		$result = curl_exec($curl);
+		$infos = curl_getinfo($curl);
+
 		curl_close($curl);
 		($this->debug) ? print "\nRes: $result]]\n" : $t=1;
 
-		$this->handleErrors($result);
+		$result = json_decode($result);
+		$this->handleErrors($result, $infos);
 
-		return json_decode($result);
+		return $result;
 	}
 
 	protected function setRequestData(&$curl, $method, $resource_type, $resource_id, $options, $additional_headers)
@@ -118,9 +121,9 @@ class AzureRequest {
 			);
 	}
 
-	protected function handleErrors($response)
+	protected function handleErrors($response, $infos)
 	{
-		if (isset($response->code))
+		if ($infos['http_code'] != 200)
 		{
 			throw new \Exception($response->message, 1);
 		}

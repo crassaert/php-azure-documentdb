@@ -3,7 +3,7 @@
 # @Date:   2018-01-08T10:21:08+01:00
 # @Email:  crassaert@gmail.com
 # @Last modified by:   crassaert
-# @Last modified time: 2018-01-08T14:44:53+01:00
+# @Last modified time: 2018-01-08T15:42:28+01:00
 
 require dirname(__FILE__) . '/config.php';
 require dirname(__FILE__) . '/../vendor/autoload.php';
@@ -49,8 +49,6 @@ class OperationsTest extends TestCase
 
         $db->get('document')->query('select * from user');
         $db->get('collection')->delete('user');
-
-        var_dump($db->get('collection')->select('cosmos_test'));
 
         $db->get('database')->delete('cosmos_test');
     }
