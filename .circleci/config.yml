@@ -2,7 +2,7 @@
 # @Date:   2018-01-08T16:27:18+01:00
 # @Email:  crassaert@gmail.com
 # @Last modified by:   crassaert
-# @Last modified time: 2018-01-08T16:28:57+01:00
+# @Last modified time: 2018-01-08T16:32:26+01:00
 
 
 
@@ -15,7 +15,7 @@ jobs:
   build:
     docker:
       # specify the version you desire here
-      - image: circleci/php:7.1.5-browsers
+      - image: circleci/php:7.1-cli
 
       # Specify service dependencies here if necessary
       # CircleCI maintains a library of pre-built images
@@ -42,4 +42,4 @@ jobs:
           key: v1-dependencies-{{ checksum "composer.json" }}
 
       # run tests!
-      - run: phpunit test
+      - run: vendor/bin/phpunit test
