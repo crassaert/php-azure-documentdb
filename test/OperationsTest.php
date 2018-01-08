@@ -3,7 +3,7 @@
 # @Date:   2018-01-08T10:21:08+01:00
 # @Email:  crassaert@gmail.com
 # @Last modified by:   crassaert
-# @Last modified time: 2018-01-08T15:42:28+01:00
+# @Last modified time: 2018-01-08T16:12:32+01:00
 
 require dirname(__FILE__) . '/config.php';
 require dirname(__FILE__) . '/../vendor/autoload.php';
@@ -33,9 +33,9 @@ class OperationsTest extends TestCase
     {
         $db = new AzureDocumentDB(AZURE_HOST, AZURE_KEY, false);
         $db->get('database')->_list();
-        $db->get('database')->create('cosmos_test', true, true);
+        $db->get('database')->create('cosmos_test');
         $db->get('database')->select('cosmos_test');
-        $db->get('collection')->create('user', true, true);
+        $db->get('collection')->create('user');
 
         // Creating 10 fake users
         for ($i = 1; $i <= self::MAX_USERS; $i++) {

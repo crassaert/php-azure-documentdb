@@ -3,7 +3,7 @@
 # @Date:   2018-01-08T10:21:08+01:00
 # @Email:  crassaert@gmail.com
 # @Last modified by:   crassaert
-# @Last modified time: 2018-01-08T16:02:51+01:00
+# @Last modified time: 2018-01-08T16:09:10+01:00
 
 namespace Crassaert\AzureDocumentDB\Request;
 
@@ -123,8 +123,10 @@ class AzureRequest {
 
 	protected function handleErrors($response, $infos)
 	{
-		if ($infos['http_code'] != 200)
+		if ($infos['http_code'] >= 400)
 		{
+			var_dump($infos);
+			var_dump($response);
 			throw new \Exception($response->message, 1);
 		}
 	}
