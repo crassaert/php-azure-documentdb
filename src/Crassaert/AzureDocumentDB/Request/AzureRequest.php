@@ -52,6 +52,61 @@ class AzureRequest
         return $result;
     }
 
+    public function multiRequest($path, $method = 'GET', $options = array(), $resource_type = null, $resource_id = '', $additional_headers = array())
+    {
+        $partitions = $options['parameters']['cross_partition_query'] ?? false;
+
+        $multiCurl = curl_multi_init();
+        $channels  = [];
+        $results   = [];
+
+        if (!$resource_type) {
+            $resource_type = current(explode('/', $path));
+        }
+
+        foreach ($partitions as $partition) {
+
+            $options['parameters']['partition_id'] = $partition;
+
+            $curl = curl_init($this->url . '/' . $path);
+            curl_setopt($curl, CURLOPT_SSLVERSION, 1);
+            curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($curl, CURLOPT_VERBOSE, $this->debug);
+            curl_setopt($curl, CURLOPT_CUSTOMREQUEST, $method);
+
+            $this->setRequestData($curl, $method, $resource_type, $resource_id, $options, $additional_headers);
+
+            curl_multi_add_handle($multiCurl, $curl);
+
+            $channels[$partition] = $curl;
+        }
+
+        $active = null;
+
+        do {
+            $mrc = curl_multi_exec($multiCurl, $active);
+        } while ($mrc == CURLM_CALL_MULTI_PERFORM);
+
+        while ($active && $mrc == CURLM_OK) {
+            if (curl_multi_select($multiCurl) == -1) {
+                continue;
+            }
+
+            do {
+                $mrc = curl_multi_exec($multiCurl, $active);
+            } while ($mrc == CURLM_CALL_MULTI_PERFORM);
+        }
+
+        foreach ($channels as $channel) {
+            $results[] = json_decode(curl_multi_getcontent($channel));
+            curl_multi_remove_handle($multiCurl, $channel);
+        }
+
+        curl_multi_close($multiCurl);
+
+        return $results;
+    }
+
     protected function setRequestData(&$curl, $method, $resource_type, $resource_id, $options, $additional_headers)
     {
         $headers = array_merge($this->getAuthHeaders($method, $resource_type, $resource_id), $additional_headers);
@@ -73,6 +128,13 @@ class AzureRequest
 
                 curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
             }
+        }
+
+        $partitionId = $options['parameters']['partition_id'] ?? false;
+
+        if ($partitionId !== false) {
+            $headers[] = 'x-ms-documentdb-query-enablecrosspartition: True';
+            $headers[] = 'x-ms-documentdb-partitionkeyrangeid: ' . $partitionId;
         }
 
         $headers[] = 'api-key:' . $this->key;

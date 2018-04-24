@@ -91,9 +91,23 @@ class Document extends Resources {
 	// TODO : Parameters
 	public function query($sql = '', $parameters = array())
 	{
+        $cpQuery = $parameters['cross_partition_query'] ?? false;
+        $method  = "request";
+
+        if ($cpQuery === true) {
+            $cpQuery = [];
+
+            foreach ($this->getPartitions()->PartitionKeyRanges as $partition) {
+                $cpQuery[] = $partition->id;
+            }
+
+            $parameters['cross_partition_query'] = $cpQuery;
+            $method = "multiRequest";
+        }
+
 		$path = 'dbs/' . $this->azureDB->get('database')->getProperty('_rid') . '/colls/' . $this->azureDB->get('collection')->getProperty('_rid') . '/docs';
 
-		$res = $this->azureDB->request->request(
+		$res = $this->azureDB->request->$method(
 			$path,
 			'POST',
 			array(
@@ -106,4 +120,16 @@ class Document extends Resources {
 
 		return $res;
 	}
+
+    public function getPartitions() {
+        $path = 'dbs/' . $this->azureDB->get('database')->getProperty('_rid') . '/colls/' . $this->azureDB->get('collection')->getProperty('_rid') . '/pkranges';
+        $res = $this->azureDB->request->request(
+            $path,
+            'GET',
+            array(),
+            'pkranges',
+            $this->azureDB->get('collection')->getProperty('_rid')
+        );
+        return $res;
+    }
 }
