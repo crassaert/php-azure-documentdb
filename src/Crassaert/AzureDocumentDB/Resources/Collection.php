@@ -39,8 +39,7 @@ class Collection extends Resources
             }
         }
 
-				throw new \Exception("Collection " . $col_name . ' does not exists.', 1);
-
+        throw new \Exception("Collection " . $col_name . ' does not exists.', 1);
     }
 
     /*

@@ -180,9 +180,9 @@ class AzureRequest
     protected function handleErrors($response, $infos)
     {
         if ($infos['http_code'] >= 400) {
-            var_dump($infos);
-            var_dump($response);
-            throw new \Exception($response->message, 1);
+            throw new \Exception(
+              $response->message . "\n" . print_r($infos) . "\n" . print_r($response),
+              1);
         }
     }
 }

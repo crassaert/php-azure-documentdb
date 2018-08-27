@@ -5,12 +5,12 @@
 # @Last modified by:   crassaert
 # @Last modified time: 2018-01-08T16:41:24+01:00
 
-require dirname(__FILE__) . '/../vendor/autoload.php';
+require dirname(__FILE__) . '/../../vendor/autoload.php';
 
 use Crassaert\AzureDocumentDB\AzureDocumentDB;
 use PHPUnit\Framework\TestCase;
 
-class OperationsTest extends TestCase
+class UserTest extends TestCase
 {
     const MAX_USERS = 10;
 
@@ -31,7 +31,7 @@ class OperationsTest extends TestCase
     public function testDatabase()
     {
         if (!isset($_ENV['AZURE_HOST']) && !isset($_ENV['AZURE_KEY'])) {
-            require dirname(__FILE__) . '/config.php';
+            require dirname(__FILE__) . '/../config.php';
         } else {
             define('AZURE_HOST', $_ENV['AZURE_HOST']);
             define('AZURE_KEY', $_ENV['AZURE_KEY']);
@@ -39,22 +39,12 @@ class OperationsTest extends TestCase
 
         $db = new AzureDocumentDB(AZURE_HOST, AZURE_KEY, false);
         $db->get('database')->_list();
+
+        $db->get('database')->delete('cosmos_test');
         $db->get('database')->create('cosmos_test');
         $db->get('database')->select('cosmos_test');
-        $db->get('collection')->create('user');
 
-        // Creating 10 fake users
-        for ($i = 1; $i <= self::MAX_USERS; $i++) {
-            $db->get('document')->create($this->getFakeUser());
-        }
-
-        $db->get('collection')->_list();
-        $users = $db->get('document')->_list();
-
-        $this->assertEquals(self::MAX_USERS, count($users->Documents));
-
-        $db->get('document')->query('select * from user');
-        $db->get('collection')->delete('user');
+        $db->get('user')->_list();
 
         $db->get('database')->delete('cosmos_test');
     }
